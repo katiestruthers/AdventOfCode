@@ -15,37 +15,16 @@ max = array1.length - 1
 array1.sort!
 array2.sort!
 
-distance = 0
-
-for index in 0..max
-  distance += (array1[index] - array2[index]).abs
-end
+distance = array1.zip(array2).sum { |a, b| (a - b).abs }
 
 puts "Distance: #{distance}"
 
 # Part 2
 
-array1_instances = {}
+array1_instances = Hash.new(0)
 
-for index in 0..max
-  array1_instances[array1[index]] = 0
-end
+array2.each { |key| array1_instances[key] += 1 if array1.include?(key) }
 
-for index in 0..max
-  key = array2[index]
-  
-  next if array1_instances[key].nil?
-
-  array1_instances[key] += 1
-end
-
-similarity_score = 0
-
-for index in 0..max
-  num1 = array1[index]
-  num2 = array1_instances[num1]
-
-  similarity_score += num1 * num2
-end
+similarity_score = array1.sum { |num1| num1 * array1_instances[num1] }
 
 puts "Similarity Score: #{similarity_score}"
